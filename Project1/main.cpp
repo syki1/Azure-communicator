@@ -1,20 +1,21 @@
 #include <iostream>
 #include "operations.h"
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 int main(int argc, char** argv)
 {
 	cout << "argc = " << argc << endl;
 	for (int i = 0; i < argc; i++)
 	{
-		cout << "argv[i] == " << argv[i] << endl;
+		cout << "argv["<<i<<"] == " << argv[i] << endl;
 	}
 
 	if (argc >= 2)
 	{
 		string command = argv[1];
-		const char* fileName = argv[2];
+		string fileName = argv[2];
 
 		if (command == "--account_name")
 		{
@@ -24,12 +25,12 @@ int main(int argc, char** argv)
 		{
 			cout << "--add if" << endl;
 			addFileToContainer(fileName);
-			addLog(fileName, "Added");
+			//addLog(fileName, "added");
 		}
 		else if (command == "--delete")
 		{
 			cout << "delete file";
-			addLog(fileName, "Deleted");
+			addLog(fileName, "deleted");
 			deleteFileFromContainer(fileName);
 		}
 		else if (command == "--logs")

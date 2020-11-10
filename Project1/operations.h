@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 /* Blob storage */
 #include <was/storage_account.h>
@@ -9,10 +10,15 @@
 /* Table storage */
 #include <was/storage_account.h>
 #include <was/table.h>
-#include <string>
+
+using std::string;
+using std::cout;
+using std::wcout;
+using std::exception;
+using std::endl;
 
 /* Functions */
-void addLog(const char* fileName, const char* operation);
-void addFileToContainer(const char* fileName = "file.txt");
-void deleteFileFromContainer(const char* fileName = "file.txt");
+void addLog(string fileName, const char* operation);
+void addFileToContainer(string fileName = "file.txt");
+void deleteFileFromContainer(string fileName = "file.txt");
 void printLog();

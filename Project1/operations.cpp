@@ -1,8 +1,6 @@
 #include "operations.h"
 
-using namespace std;
-
-void addLog(const char* fileName, const char* operation)
+void addLog(string fileName, const char* operation)
 {
 	try
 	{
@@ -35,7 +33,7 @@ void addLog(const char* fileName, const char* operation)
 		// Execute the insert operation.
 		azure::storage::table_result insert_result = table.execute(insert_operation);
 	}
-	catch (const exception& e)
+	catch (const std::exception& e)
 	{
 		cout << "Error " << endl << e.what() << endl;
 	}
@@ -84,7 +82,7 @@ void printLog()
 	}
 }
 
-void addFileToContainer(const char* fileName)
+void addFileToContainer(string fileName)
 {
 	try
 	{
@@ -102,15 +100,14 @@ void addFileToContainer(const char* fileName)
 		// Retrieve a reference to a previously created container.
 		azure::storage::cloud_blob_container container = blob_client.get_container_reference(U("files"));
 
-		// Retrieve reference to a blob named "my-blob-1".
-		//azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U("a.txt"));
-		//azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U("a.txt"));
+		// Create the container if it doesn't already exist.
+		container.create_if_not_exists();
 
-		// Create or overwrite the "my-blob-2" and "my-blob-3" blobs with contents from text.
-		// Retrieve a reference to a blob named "my-blob-2".
+		// Retrieve a reference to a blob.
 		azure::storage::cloud_block_blob blob = container.get_block_blob_reference(utility::conversions::to_string_t(fileName));
-		blob.upload_from_file(U("file.txt"));
+		blob.upload_from_file(utility::conversions::to_string_t(fileName));
 
+		cout << "OK " << endl;
 	}
 	catch (const exception& e)
 	{
@@ -118,7 +115,7 @@ void addFileToContainer(const char* fileName)
 	}
 }
 
-void deleteFileFromContainer(const char* fileName)
+void deleteFileFromContainer(string fileName)
 {
 	try
 	{
@@ -136,11 +133,11 @@ void deleteFileFromContainer(const char* fileName)
 		// Retrieve a reference to a previously created container.
 		azure::storage::cloud_blob_container container = blob_client.get_container_reference(U("files"));
 
-		// Retrieve reference to a blob named "my-blob-1".
+		// Retrieve reference to a blob.
 		azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(utility::conversions::to_string_t(fileName));
 
 		// Delete the blob.
-		blockBlob.delete_blob();
+		blockBlob.delete_blob_if_exists();
 		cout << "OK" << endl;
 	}
 	catch (const exception& e)
