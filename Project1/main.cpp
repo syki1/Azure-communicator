@@ -12,25 +12,49 @@
 
 using namespace std;
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-	if (argc < 2)
-		cout << "Give more parameters" << endl;
-
-	int choice = 0;
-
-	switch (choice)
+	enum command
 	{
-		case 0:
+		CHECK_USER,
+		ADD,
+		DEL,
+		LOG,
+		UNKNOWN
+	};
+
+	if (argc > 2)
+	{
+		string command = argv[1];
+		int choice = UNKNOWN;
+
+		if (command == "--account_name")
+			choice = CHECK_USER;
+		else if (command == "--add")
+			choice = ADD;
+		else if (command == "--delete")
+			choice = DEL;
+		else if (command == "--logs")
+			choice = LOG;
+		else
+			choice = UNKNOWN;
+
+		switch (choice)
+		{
+		case ADD:
 			break;
-		case 1:
+		case DEL:
 			break;
-		case 2:
+		case LOG:
+			break;
 		default:
 			cout << "Unknown option" << endl;
+		}
 	}
-		
-
-
+	else
+	{
+		cout << "Give more parameters" << endl;
+	}
+	
 	return 0;
 }
