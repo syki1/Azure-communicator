@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 		{
 			cout << "--add if" << endl;
 			addFileToContainer(fileName);
-			//addLog(fileName, "added");
+			addLog(fileName, "added");
 		}
 		else if (command == "--delete")
 		{

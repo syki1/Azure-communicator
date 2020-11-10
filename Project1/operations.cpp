@@ -19,8 +19,29 @@ void addLog(string fileName, const char* operation)
 		// Create the table if it doesn't exist.
 		table.create_if_not_exists();
 
-		// Create a new customer entity.
-		azure::storage::table_entity log(U("NULL"), U("2"));
+		// start
+
+		// Construct the query operation;
+		azure::storage::table_query query;
+
+		//query.set_filter_string(azure::storage::table_query::generate_filter_condition(U("RowKey"), azure::storage::query_comparison_operator::equal, U("Smith")));
+
+		// Execute the query.
+		azure::storage::table_query_iterator it = table.execute_query(query);
+
+		// Print the fields for each customer.
+		azure::storage::table_query_iterator end_of_results;
+
+		// Find last element
+		int indexLastElement = 0;
+		for(; it != end_of_results; ++it)
+		{
+			indexLastElement++;
+		}
+
+		string indexElementString = std::to_string(indexLastElement);
+		// Create a new log entity.
+		azure::storage::table_entity log(utility::conversions::to_string_t(indexElementString), utility::conversions::to_string_t(indexElementString));
 
 		azure::storage::table_entity::properties_type& properties = log.properties();
 		properties.reserve(2);
@@ -137,7 +158,7 @@ void deleteFileFromContainer(string fileName)
 		azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(utility::conversions::to_string_t(fileName));
 
 		// Delete the blob.
-		blockBlob.delete_blob_if_exists();
+		blockBlob.delete_blob();
 		cout << "OK" << endl;
 	}
 	catch (const exception& e)
