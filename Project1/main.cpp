@@ -13,9 +13,8 @@ int main(int argc, char** argv)
 
 	if (argc >= 2)
 	{
-		//const char fileName[20] = "File.txt";
-		const char* fileName = argv[2];
 		string command = argv[1];
+		const char* fileName = argv[2];
 
 		if (command == "--account_name")
 		{
@@ -25,10 +24,12 @@ int main(int argc, char** argv)
 		{
 			cout << "--add if" << endl;
 			addFileToContainer(fileName);
+			addLog(fileName, "Added");
 		}
 		else if (command == "--delete")
 		{
 			cout << "delete file";
+			addLog(fileName, "Deleted");
 			deleteFileFromContainer(fileName);
 		}
 		else if (command == "--logs")

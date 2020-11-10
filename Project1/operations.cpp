@@ -26,9 +26,8 @@ void addLog(const char* fileName, const char* operation)
 
 		azure::storage::table_entity::properties_type& properties = log.properties();
 		properties.reserve(2);
-		//properties[U("File_name")] = azure::storage::entity_property(U("example2.txt"));
 		properties[U("File_name")] = azure::storage::entity_property(utility::conversions::to_string_t(fileName));
-		properties[U("Operation")] = azure::storage::entity_property(U("added"));
+		properties[U("Operation")] = azure::storage::entity_property(utility::conversions::to_string_t(operation));
 
 		// Create the table operation that inserts the customer entity.
 		azure::storage::table_operation insert_operation = azure::storage::table_operation::insert_entity(log);
@@ -89,7 +88,7 @@ void addFileToContainer(const char* fileName)
 {
 	try
 	{
-		cout << "Copying " << fileName << " to Azure service ";
+		cout << "Copying " << fileName << " to Azure service ... ";
 
 		// Define the connection-string with your values.
 		const utility::string_t storage_connection_string(U("DefaultEndpointsProtocol=https;AccountName=filesstorage2;AccountKey=8+0/ZYgNQ/TCy16KG/DePV02hYwcru9DCTnetIDrO62aYhbIKf8DIwmtQa4qWg959DS2LQE3zlQV9OlupsoGQg=="));
@@ -138,7 +137,7 @@ void deleteFileFromContainer(const char* fileName)
 		azure::storage::cloud_blob_container container = blob_client.get_container_reference(U("files"));
 
 		// Retrieve reference to a blob named "my-blob-1".
-		azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U("example.txt"));
+		azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(utility::conversions::to_string_t(fileName));
 
 		// Delete the blob.
 		blockBlob.delete_blob();
