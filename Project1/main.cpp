@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "operations.h"
 
 /* Blob storage */
 #include <was/storage_account.h>
@@ -24,6 +25,7 @@ int main(int argc, char** argv)
 	if (argc >= 2)
 	{
 		string fileName = "File.txt";
+		//string fileName = argv[2];
 		string command = argv[1];
 
 		if (command == "--account_name")
@@ -52,7 +54,7 @@ int main(int argc, char** argv)
 
 				// Retrieve reference to a blob named "my-blob-1".
 				//azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U("a.txt"));
-				azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U(fileName));
+				azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U("a.txt"));
 
 				// Create or overwrite the "my-blob-2" and "my-blob-3" blobs with contents from text.
 				// Retrieve a reference to a blob named "my-blob-2".
@@ -98,7 +100,7 @@ int main(int argc, char** argv)
 		}
 		else if (command == "--logs")
 		{
-
+			addLog();
 
 			cout << "logs" << endl;
 		}
