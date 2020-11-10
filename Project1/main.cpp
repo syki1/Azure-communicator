@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 /* Blob storage */
 #include <was/storage_account.h>
@@ -14,14 +15,6 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	enum command
-	{
-		CHECK_USER,
-		ADD,
-		DEL,
-		LOG,
-		UNKNOWN
-	};
 	cout << "argc = " << argc;
 	for (int i = 0; i < argc; i++)
 	{
@@ -30,49 +23,47 @@ int main(int argc, char** argv)
 
 	if (argc >= 2)
 	{
-		string user = "qazsed91@gmail.com";
-		string password = "haslo123";
-		//string fileName = argv[2];
 		string fileName = "File.txt";
 		string command = argv[1];
-		int choice = UNKNOWN;
 
 		if (command == "--account_name")
-			choice = CHECK_USER;
+		{
+			cout << "account";
+		}
 		else if (command == "--add")
 		{
 			cout << "--add if" << endl;
-			
-			//cout << "Copying " << fileName << " to Azure service ";
 
-			// Define the connection-string with your values.
-			const utility::string_t storage_connection_string(U("DefaultEndpointsProtocol=https;AccountName=filesstorage2;AccountKey=8+0/ZYgNQ/TCy16KG/DePV02hYwcru9DCTnetIDrO62aYhbIKf8DIwmtQa4qWg959DS2LQE3zlQV9OlupsoGQg=="));
+			try
+			{
+				cout << "Copying " << fileName << " to Azure service ";
 
-			// Retrieve storage account from connection string.
-			azure::storage::cloud_storage_account storage_account = azure::storage::cloud_storage_account::parse(storage_connection_string);
+				// Define the connection-string with your values.
+				const utility::string_t storage_connection_string(U("DefaultEndpointsProtocol=https;AccountName=filesstorage2;AccountKey=8+0/ZYgNQ/TCy16KG/DePV02hYwcru9DCTnetIDrO62aYhbIKf8DIwmtQa4qWg959DS2LQE3zlQV9OlupsoGQg=="));
 
-			// Create the blob client.
-			azure::storage::cloud_blob_client blob_client = storage_account.create_cloud_blob_client();
+				// Retrieve storage account from connection string.
+				azure::storage::cloud_storage_account storage_account = azure::storage::cloud_storage_account::parse(storage_connection_string);
 
-			// Retrieve a reference to a previously created container.
-			azure::storage::cloud_blob_container container = blob_client.get_container_reference(U("files"));
+				// Create the blob client.
+				azure::storage::cloud_blob_client blob_client = storage_account.create_cloud_blob_client();
 
-			// Retrieve reference to a blob named "my-blob-1".
-			azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U(fileName);
+				// Retrieve a reference to a previously created container.
+				azure::storage::cloud_blob_container container = blob_client.get_container_reference(U("files"));
 
-			// Create or overwrite the "my-blob-1" blob with contents from a local file.
-			concurrency::streams::istream input_stream = concurrency::streams::file_stream<uint8_t>::open_istream(U("file.txt")).get();
-			blockBlob.upload_from_stream(input_stream);
-			input_stream.close().wait();
+				// Retrieve reference to a blob named "my-blob-1".
+				//azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U("a.txt"));
+				azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U(fileName));
 
-			// Create or overwrite the "my-blob-2" and "my-blob-3" blobs with contents from text.
-			// Retrieve a reference to a blob named "my-blob-2".
-			azure::storage::cloud_block_blob blob2 = container.get_block_blob_reference(U("my-blob-2"));
-			blob2.upload_from_file(U("file.txt"));
+				// Create or overwrite the "my-blob-2" and "my-blob-3" blobs with contents from text.
+				// Retrieve a reference to a blob named "my-blob-2".
+				azure::storage::cloud_block_blob blob = container.get_block_blob_reference(U("example.txt"));
+				blob.upload_from_file(U("file.txt"));
 
-			/* // Retrieve a reference to a blob named "my-blob-3".
-			azure::storage::cloud_block_blob blob3 = container.get_block_blob_reference(U("my-directory/my-sub-directory/my-blob-3"));
-			blob3.upload_text(U("other text")); */
+			}
+			catch (const exception& e)
+			{
+				cout << "Error " << endl << e.what() << endl;
+			}
 
 		}
 		else if (command == "--delete")
@@ -94,7 +85,7 @@ int main(int argc, char** argv)
 				azure::storage::cloud_blob_container container = blob_client.get_container_reference(U("files"));
 
 				// Retrieve reference to a blob named "my-blob-1".
-				azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U("File.txt"));
+				azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U("example.txt"));
 
 				// Delete the blob.
 				blockBlob.delete_blob();
@@ -105,21 +96,18 @@ int main(int argc, char** argv)
 				cout << "Error " << endl << e.what() << endl;
 			}
 		}
-			
 		else if (command == "--logs")
 		{
+
+
 			cout << "logs" << endl;
 		}
 		else
-		{
 			cout << "Unknown option";
-		}
-			
 	}
 	else
 	{
 		cout << "Give more parameters" << endl;
 	}
-	
 	return 0;
 }
