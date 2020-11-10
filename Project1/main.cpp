@@ -1,22 +1,11 @@
 #include <iostream>
-#include <string>
 #include "operations.h"
-
-/* Blob storage */
-#include <was/storage_account.h>
-#include <was/blob.h>
-#include <cpprest/filestream.h>  
-#include <cpprest/containerstream.h> 
-
-/* Table storage */
-#include <was/storage_account.h>
-#include <was/table.h>
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
-	cout << "argc = " << argc;
+	cout << "argc = " << argc << endl;
 	for (int i = 0; i < argc; i++)
 	{
 		cout << "argv[i] == " << argv[i] << endl;
@@ -24,8 +13,8 @@ int main(int argc, char** argv)
 
 	if (argc >= 2)
 	{
-		const char fileName[20] = "File.txt";
-		//string fileName = argv[2];
+		//const char fileName[20] = "File.txt";
+		const char* fileName = argv[2];
 		string command = argv[1];
 
 		if (command == "--account_name")
@@ -39,17 +28,17 @@ int main(int argc, char** argv)
 		}
 		else if (command == "--delete")
 		{
-			cout << "file";
+			cout << "delete file";
 			deleteFileFromContainer(fileName);
 		}
 		else if (command == "--logs")
 		{
-			addLog(fileName, "Added");
-
 			cout << "logs" << endl;
+			addLog(fileName, "Added");
 		}
 		else if (command == "--print")
 		{
+			cout << "print logs" << endl;
 			printLog();
 		}
 		else

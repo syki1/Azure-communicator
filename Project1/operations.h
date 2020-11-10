@@ -11,7 +11,8 @@
 #include <was/table.h>
 #include <string>
 
-void addLog(const char* fileName, const char* operation);
-void addFileToContainer(const char* fileName);
-void deleteFileFromContainer(const char* fileName);
+/* Functions */
+void addLog(const char* fileName = "file.txt", const char* operation = "Unknown");
+void addFileToContainer(const char* fileName = "file.txt");
+void deleteFileFromContainer(const char* fileName = "file.txt");
 void printLog();
