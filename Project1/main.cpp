@@ -32,7 +32,8 @@ int main(int argc, char** argv)
 	{
 		string user = "qazsed91@gmail.com";
 		string password = "haslo123";
-
+		//string fileName = argv[2];
+		string fileName = "File.txt";
 		string command = argv[1];
 		int choice = UNKNOWN;
 
@@ -41,11 +42,11 @@ int main(int argc, char** argv)
 		else if (command == "--add")
 		{
 			cout << "--add if" << endl;
-			//string fileName = argv[2];
+			
 			//cout << "Copying " << fileName << " to Azure service ";
 
 			// Define the connection-string with your values.
-			const utility::string_t storage_connection_string(U("DefaultEndpointsProtocol=https;AccountName=qazsed91@gmail.com;AccountKey=haslo123"));
+			const utility::string_t storage_connection_string(U("DefaultEndpointsProtocol=https;AccountName=filesstorage2;AccountKey=8+0/ZYgNQ/TCy16KG/DePV02hYwcru9DCTnetIDrO62aYhbIKf8DIwmtQa4qWg959DS2LQE3zlQV9OlupsoGQg=="));
 
 			// Retrieve storage account from connection string.
 			azure::storage::cloud_storage_account storage_account = azure::storage::cloud_storage_account::parse(storage_connection_string);
@@ -54,10 +55,10 @@ int main(int argc, char** argv)
 			azure::storage::cloud_blob_client blob_client = storage_account.create_cloud_blob_client();
 
 			// Retrieve a reference to a previously created container.
-			azure::storage::cloud_blob_container container = blob_client.get_container_reference(U("filesstorage2"));
+			azure::storage::cloud_blob_container container = blob_client.get_container_reference(U("files"));
 
 			// Retrieve reference to a blob named "my-blob-1".
-			azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U("files"));
+			azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U(fileName);
 
 			// Create or overwrite the "my-blob-1" blob with contents from a local file.
 			concurrency::streams::istream input_stream = concurrency::streams::file_stream<uint8_t>::open_istream(U("file.txt")).get();
@@ -76,24 +77,33 @@ int main(int argc, char** argv)
 		}
 		else if (command == "--delete")
 		{
-			cout << "Deleting file.txt from Azure service ";
-			// Define the connection-string with your values.
-			const utility::string_t storage_connection_string(U("DefaultEndpointsProtocol=https;AccountName=qazsed91@gmail.com;AccountKey=haslo123"));
+			try
+			{
+				cout << "Deleting " << fileName <<  " from Azure service ... ";
 
-			// Retrieve storage account from connection string.
-			azure::storage::cloud_storage_account storage_account = azure::storage::cloud_storage_account::parse(storage_connection_string);
+				// Define the connection-string with your values.
+				const utility::string_t storage_connection_string(U("DefaultEndpointsProtocol=https;AccountName=filesstorage2;AccountKey=8+0/ZYgNQ/TCy16KG/DePV02hYwcru9DCTnetIDrO62aYhbIKf8DIwmtQa4qWg959DS2LQE3zlQV9OlupsoGQg=="));
 
-			// Create the blob client.
-			azure::storage::cloud_blob_client blob_client = storage_account.create_cloud_blob_client();
+				// Retrieve storage account from connection string.
+				azure::storage::cloud_storage_account storage_account = azure::storage::cloud_storage_account::parse(storage_connection_string);
 
-			// Retrieve a reference to a previously created container.
-			azure::storage::cloud_blob_container container = blob_client.get_container_reference(U("filesstorage2"));
-			
-			// Retrieve reference to a blob named "my-blob-1".
-			azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U("files"));
+				// Create the blob client.
+				azure::storage::cloud_blob_client blob_client = storage_account.create_cloud_blob_client();
 
-			// Delete the blob.
-			blockBlob.delete_blob();
+				// Retrieve a reference to a previously created container.
+				azure::storage::cloud_blob_container container = blob_client.get_container_reference(U("files"));
+
+				// Retrieve reference to a blob named "my-blob-1".
+				azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(U("File.txt"));
+
+				// Delete the blob.
+				blockBlob.delete_blob();
+				cout << "OK" << endl;
+			}
+			catch(const exception& e)
+			{
+				cout << "Error " << endl << e.what() << endl;
+			}
 		}
 			
 		else if (command == "--logs")
