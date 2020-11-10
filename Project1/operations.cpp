@@ -1,6 +1,6 @@
 #include "operations.h"
 
-void addLog(string fileName, const char* operation)
+void addLog(string fileName, const char* operation, unsigned int sizeOfFile)
 {
 	try
 	{
@@ -24,8 +24,6 @@ void addLog(string fileName, const char* operation)
 		// Construct the query operation;
 		azure::storage::table_query query;
 
-		//query.set_filter_string(azure::storage::table_query::generate_filter_condition(U("RowKey"), azure::storage::query_comparison_operator::equal, U("Smith")));
-
 		// Execute the query.
 		azure::storage::table_query_iterator it = table.execute_query(query);
 
@@ -40,13 +38,15 @@ void addLog(string fileName, const char* operation)
 		}
 
 		string indexElementString = std::to_string(indexLastElement);
+		string sizeOfFileString = std::to_string(sizeOfFile);
 		// Create a new log entity.
 		azure::storage::table_entity log(utility::conversions::to_string_t(indexElementString), utility::conversions::to_string_t(indexElementString));
 
 		azure::storage::table_entity::properties_type& properties = log.properties();
-		properties.reserve(2);
+		properties.reserve(3);
 		properties[U("File_name")] = azure::storage::entity_property(utility::conversions::to_string_t(fileName));
 		properties[U("Operation")] = azure::storage::entity_property(utility::conversions::to_string_t(operation));
+		properties[U("Size_of_file")] = azure::storage::entity_property(utility::conversions::to_string_t(sizeOfFileString));
 
 		// Create the table operation that inserts the customer entity.
 		azure::storage::table_operation insert_operation = azure::storage::table_operation::insert_entity(log);
@@ -60,7 +60,7 @@ void addLog(string fileName, const char* operation)
 	}
 }
 
-void printLog()
+void printLogs()
 {
 	try
 	{
@@ -79,8 +79,6 @@ void printLog()
 		// Construct the query operation for all customer entities where PartitionKey="Smith".
 		azure::storage::table_query query;
 
-		//query.set_filter_string(azure::storage::table_query::generate_filter_condition(U("RowKey"), azure::storage::query_comparison_operator::equal, U("Smith")));
-
 		// Execute the query.
 		azure::storage::table_query_iterator it = table.execute_query(query);
 
@@ -94,7 +92,7 @@ void printLog()
 				<< U(", Property1: ") << properties.at(U("File_name")).string_value()
 				<< U(", Property2: ") << properties.at(U("Operation")).string_value() << endl; */
 
-			wcout << "File " << properties.at(U("Operation")).string_value() << " " << properties.at(U("File_name")).string_value() << endl;
+			wcout << "File " << properties.at(U("Operation")).string_value() << " " << properties.at(U("File_name")).string_value() << " size:" << properties.at(U("Size_of_file")).string_value() << "B" << endl;
 		}
 	}
 	catch (const exception& e)

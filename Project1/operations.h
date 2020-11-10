@@ -18,7 +18,7 @@ using std::exception;
 using std::endl;
 
 /* Functions */
-void addLog(string fileName, const char* operation);
+void addLog(string fileName, const char* operation, unsigned int sizeOfFile);
 void addFileToContainer(string fileName = "file.txt");
 void deleteFileFromContainer(string fileName = "file.txt");
-void printLog();
+void printLogs();
