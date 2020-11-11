@@ -86,12 +86,8 @@ void printLogs()
 		{
 			const azure::storage::table_entity::properties_type& properties = it->properties();
 
-			/* std::wcout << U("PartitionKey: ") << it->partition_key() << U(", RowKey: ") << it->row_key()
-				<< U(", Property1: ") << properties.at(U("File_name")).string_value()
-				<< U(", Property2: ") << properties.at(U("Operation")).string_value() << endl; */
-
-			wcout << "File " << properties.at(U("Operation")).string_value() << " " << properties.at(U("File_name")).string_value() << " size:" 
-				<< properties.at(U("Size_of_file")).string_value() << "B" << endl;
+			wcout << "File " << properties.at(U("Operation")).string_value() << " - " << properties.at(U("File_name")).string_value() << " size:"
+				<< properties.at(U("Size_of_file")).string_value() << "B" << U(" ") << it->timestamp().to_string() << endl;
 		}
 	}
 	catch (const exception& e)
