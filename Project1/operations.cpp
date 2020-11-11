@@ -29,7 +29,7 @@ void addLog(string fileName, const char* operation, unsigned int sizeOfFile)
 		azure::storage::table_query_iterator end_of_results;
 
 		// Find last element
-		int indexLastElement = 0;
+		int indexLastElement = 1;
 		for(; it != end_of_results; ++it)
 		{
 			indexLastElement++;
@@ -133,7 +133,7 @@ void addFileToContainer(string fileName)
 	}
 }
 
-void deleteFileFromContainer(string fileName)
+void deleteFileFromContainer(string fileName, unsigned int *sizeOfFile)
 {
 	try
 	{
@@ -154,6 +154,12 @@ void deleteFileFromContainer(string fileName)
 		// Retrieve reference to a blob.
 		azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(utility::conversions::to_string_t(fileName));
 
+		// Get size of deleted file (stream)
+		concurrency::streams::container_buffer<std::vector<uint8_t>> buffer;
+		concurrency::streams::ostream output_stream(buffer);
+		blockBlob.download_to_stream(output_stream);
+		*sizeOfFile = buffer.size();
+
 		// Delete the blob.
 		blockBlob.delete_blob();
 		cout << "OK" << endl;
@@ -162,4 +168,32 @@ void deleteFileFromContainer(string fileName)
 	{
 		cout << "Error " << endl << e.what() << endl;
 	}
+}
+
+void checkUserAndPassword(string accountName, string accountKey)
+{
+	Json::Value users;
+	std::ifstream userFile("user_pass.json", std::ifstream::binary);
+
+	if (userFile.fail()) {
+		cout << "file isn't open" << endl;
+		return;
+	}
+
+	userFile >> users;
+
+	bool userAndKey = false;
+	for (int i = 1; i < users.size() + 1; i++)
+	{
+		string objectName = ("User" + std::to_string(i)).c_str();
+		if (accountName == users[objectName]["User"].asString() && accountKey == users[objectName]["Password"].asString())
+		{
+			userAndKey = true;
+			break;
+		}
+	}
+	if (userAndKey)
+		cout << "Pair of user and key exist" << endl;
+	else
+		cout << "Pair of user and key don't exist" << endl;
 }
