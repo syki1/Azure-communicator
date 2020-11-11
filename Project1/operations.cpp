@@ -29,7 +29,7 @@ void addLog(string fileName, const char* operation, unsigned int sizeOfFile)
 		azure::storage::table_query_iterator end_of_results;
 
 		// Find last element
-		int indexLastElement = 0;
+		int indexLastElement = 1;
 		for(; it != end_of_results; ++it)
 		{
 			indexLastElement++;
@@ -86,12 +86,8 @@ void printLogs()
 		{
 			const azure::storage::table_entity::properties_type& properties = it->properties();
 
-			/* std::wcout << U("PartitionKey: ") << it->partition_key() << U(", RowKey: ") << it->row_key()
-				<< U(", Property1: ") << properties.at(U("File_name")).string_value()
-				<< U(", Property2: ") << properties.at(U("Operation")).string_value() << endl; */
-
-			wcout << "File " << properties.at(U("Operation")).string_value() << " " << properties.at(U("File_name")).string_value() << " size:" 
-				<< properties.at(U("Size_of_file")).string_value() << "B" << endl;
+			wcout << "File " << properties.at(U("Operation")).string_value() << " - " << properties.at(U("File_name")).string_value() << " size:"
+				<< properties.at(U("Size_of_file")).string_value() << "B" << U(" ") << it->timestamp().to_string() << endl;
 		}
 	}
 	catch (const exception& e)
@@ -100,7 +96,7 @@ void printLogs()
 	}
 }
 
-void addFileToContainer(string fileName)
+int addFileToContainer(string fileName)
 {
 	try
 	{
@@ -126,14 +122,16 @@ void addFileToContainer(string fileName)
 		blob.upload_from_file(utility::conversions::to_string_t(fileName));
 
 		cout << "OK " << endl;
+		return 1;
 	}
 	catch (const exception& e)
 	{
 		cout << "Error " << endl << e.what() << endl;
+		return -1;
 	}
 }
 
-void deleteFileFromContainer(string fileName)
+int deleteFileFromContainer(string fileName, unsigned int *sizeOfFile)
 {
 	try
 	{
@@ -154,12 +152,49 @@ void deleteFileFromContainer(string fileName)
 		// Retrieve reference to a blob.
 		azure::storage::cloud_block_blob blockBlob = container.get_block_blob_reference(utility::conversions::to_string_t(fileName));
 
+		// Get size of deleted file (stream)
+		concurrency::streams::container_buffer<std::vector<uint8_t>> buffer;
+		concurrency::streams::ostream output_stream(buffer);
+		blockBlob.download_to_stream(output_stream);
+		*sizeOfFile = buffer.size();
+
 		// Delete the blob.
 		blockBlob.delete_blob();
 		cout << "OK" << endl;
+
+		return 1;
 	}
 	catch (const exception& e)
 	{
 		cout << "Error " << endl << e.what() << endl;
+		return -1;
 	}
+}
+
+void checkUserAndPassword(string accountName, string accountKey)
+{
+	Json::Value users;
+	std::ifstream userFile("user_pass.json", std::ifstream::binary);
+
+	if (userFile.fail()) {
+		cout << "file isn't open" << endl;
+		return;
+	}
+
+	userFile >> users;
+
+	bool userAndKey = false;
+	for (int i = 1; i < users.size() + 1; i++)
+	{
+		string objectName = ("User" + std::to_string(i)).c_str();
+		if (accountName == users[objectName]["User"].asString() && accountKey == users[objectName]["Password"].asString())
+		{
+			userAndKey = true;
+			break;
+		}
+	}
+	if (userAndKey)
+		cout << "Pair of user and key exist" << endl;
+	else
+		cout << "Pair of user and key don't exist" << endl;
 }
