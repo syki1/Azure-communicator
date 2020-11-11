@@ -2,12 +2,10 @@
 #include <fstream>
 #include <json/value.h>
 #include <json/json.h>
-#include <nlohmann/json.hpp>
 #include "operations.h"
 
 using std::cout;
 using std::endl;
-using json = nlohmann::json;
 
 int main(int argc, char** argv)
 {
@@ -49,7 +47,6 @@ int main(int argc, char** argv)
 			for (int i = 1; i < users.size() + 1; i++)
 			{
 				string objectName = ("User" + std::to_string(i)).c_str();
-				cout << objectName;
 				if (accountName == users[objectName]["User"].asString() && accountKey == users[objectName]["Password"].asString())
 				{
 					userAndKey = true;
@@ -60,9 +57,6 @@ int main(int argc, char** argv)
 				cout << "User and key exist" << endl;
 			else
 				cout << "User and key don't exist" << endl;
-
-			cout << users["User1"]["User"]; 
-			cout << users["User2"]["Password"]; 
 		}
 		else if (command == "--add")
 		{

@@ -1,0 +1,7 @@
+﻿  main.cpp
+C:\Users\Pawel\Desktop\Zadanie Testowe\Project1\Project1\main.cpp(31,27): warning C4244: 'initializing': conversion from 'std::streamoff' to 'unsigned int', possible loss of data
+C:\Users\Pawel\Desktop\Zadanie Testowe\Project1\Project1\main.cpp(46,10): error C4996: 'Json::Reader': Use CharReader and CharReaderBuilder instead.
+C:\Users\Pawel\Desktop\Zadanie Testowe\Project1\Project1\main.cpp(55,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Pawel\Desktop\Zadanie Testowe\Project1\Project1\main.cpp(46): error C4996: 'Json::Reader::__autoclassinit2': Use CharReader and CharReaderBuilder instead.
+C:\Users\Pawel\Desktop\Zadanie Testowe\Project1\Project1\main.cpp(46,17): error C4996: 'Json::Reader::Reader': Use CharReader and CharReaderBuilder instead
+C:\Users\Pawel\Desktop\Zadanie Testowe\Project1\Project1\main.cpp(47,10): error C4996: 'Json::Reader::parse': Use CharReader and CharReaderBuilder instead.

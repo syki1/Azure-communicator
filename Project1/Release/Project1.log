@@ -1,0 +1,9 @@
+﻿  main.cpp
+C:\Users\Pawel\Desktop\Zadanie Testowe\Project1\Project1\main.cpp(35,17): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+  operations.cpp
+  Generating code
+  107 of 811 functions (13.2%) were compiled, the rest were copied from previous compilation.
+    51 functions were new in current compilation
+    49 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Project1.vcxproj -> C:\Users\Pawel\Desktop\Zadanie Testowe\Project1\Release\Project1.exe
