@@ -24,7 +24,7 @@ using std::endl;
 
 /* Functions */
 void addLog(string fileName, const char* operation, unsigned int sizeOfFile);
-void addFileToContainer(string fileName = "file.txt");
-void deleteFileFromContainer(string fileName, unsigned int* sizeOfFile);
+int addFileToContainer(string fileName = "file.txt");
+int deleteFileFromContainer(string fileName, unsigned int* sizeOfFile);
 void printLogs();
 void checkUserAndPassword(string accountName, string accountKey);

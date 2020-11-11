@@ -100,7 +100,7 @@ void printLogs()
 	}
 }
 
-void addFileToContainer(string fileName)
+int addFileToContainer(string fileName)
 {
 	try
 	{
@@ -126,14 +126,16 @@ void addFileToContainer(string fileName)
 		blob.upload_from_file(utility::conversions::to_string_t(fileName));
 
 		cout << "OK " << endl;
+		return 1;
 	}
 	catch (const exception& e)
 	{
 		cout << "Error " << endl << e.what() << endl;
+		return -1;
 	}
 }
 
-void deleteFileFromContainer(string fileName, unsigned int *sizeOfFile)
+int deleteFileFromContainer(string fileName, unsigned int *sizeOfFile)
 {
 	try
 	{
@@ -163,10 +165,13 @@ void deleteFileFromContainer(string fileName, unsigned int *sizeOfFile)
 		// Delete the blob.
 		blockBlob.delete_blob();
 		cout << "OK" << endl;
+
+		return 1;
 	}
 	catch (const exception& e)
 	{
 		cout << "Error " << endl << e.what() << endl;
+		return -1;
 	}
 }
 

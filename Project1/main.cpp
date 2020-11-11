@@ -34,8 +34,8 @@ int main(int argc, char** argv)
 			
 			if (sizeOfFile < 2000000)
 			{
-				addFileToContainer(fileName);
-				addLog(fileName, "added", sizeOfFile);
+				if(addFileToContainer(fileName) == 1);
+					addLog(fileName, "added", sizeOfFile);
 			}
 			else
 				cout << "File too large" << endl;
@@ -43,8 +43,8 @@ int main(int argc, char** argv)
 		else if (command == "--delete")
 		{
 			unsigned int sizeOfDeletedFile = 0;
-			deleteFileFromContainer(fileName, &sizeOfDeletedFile);
-			addLog(fileName, "deleted", sizeOfDeletedFile);
+			if(deleteFileFromContainer(fileName, &sizeOfDeletedFile) == 1);
+				addLog(fileName, "deleted", sizeOfDeletedFile);
 		}
 		else if (command == "--logs")
 		{
