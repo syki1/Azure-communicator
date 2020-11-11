@@ -19,8 +19,6 @@ void addLog(string fileName, const char* operation, unsigned int sizeOfFile)
 		// Create the table if it doesn't exist.
 		table.create_if_not_exists();
 
-		// start
-
 		// Construct the query operation;
 		azure::storage::table_query query;
 
@@ -92,7 +90,8 @@ void printLogs()
 				<< U(", Property1: ") << properties.at(U("File_name")).string_value()
 				<< U(", Property2: ") << properties.at(U("Operation")).string_value() << endl; */
 
-			wcout << "File " << properties.at(U("Operation")).string_value() << " " << properties.at(U("File_name")).string_value() << " size:" << properties.at(U("Size_of_file")).string_value() << "B" << endl;
+			wcout << "File " << properties.at(U("Operation")).string_value() << " " << properties.at(U("File_name")).string_value() << " size:" 
+				<< properties.at(U("Size_of_file")).string_value() << "B" << endl;
 		}
 	}
 	catch (const exception& e)

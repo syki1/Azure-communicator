@@ -1,9 +1,13 @@
 #include <iostream>
 #include <fstream>
+#include <json/value.h>
+#include <json/json.h>
+#include <nlohmann/json.hpp>
 #include "operations.h"
 
 using std::cout;
 using std::endl;
+using json = nlohmann::json;
 
 int main(int argc, char** argv)
 {
@@ -18,9 +22,9 @@ int main(int argc, char** argv)
 	if (argc >= 2)
 	{
 		command = argv[1];
-		if (argc == 2)
-			fileName = "";
-		else 
+		fileName = "";
+
+		if (argc > 2)
 			fileName = argv[2];
 
 		std::ifstream file(fileName, std::ios::binary | std::ios::ate);
@@ -28,15 +32,48 @@ int main(int argc, char** argv)
 		if (command == "--add" && sizeOfFile > 2000000)  
 			cout << "Too large file " << endl;
 
-		if (command == "--account_name")
+		if (command == "--account_name" && argc >= 5)
 		{
-			cout << "account";
+			string accountName = argv[2];
+			string accountKey = argv[4];
+			cout << "accName = " << accountName << " accKey = " << accountKey << endl;
+			
+			Json::Value users;
+			std::ifstream userFile("user_pass.json", std::ifstream::binary);
+			userFile >> users;
+
+			cout << users << endl; //This will print the entire json object
+			cout << "users size = " << users.size();
+
+			bool userAndKey = false;
+			for (int i = 1; i < users.size() + 1; i++)
+			{
+				string objectName = ("User" + std::to_string(i)).c_str();
+				cout << objectName;
+				if (accountName == users[objectName]["User"].asString() && accountKey == users[objectName]["Password"].asString())
+				{
+					userAndKey = true;
+					break;
+				}
+			}
+			if (userAndKey)
+				cout << "User and key exist" << endl;
+			else
+				cout << "User and key don't exist" << endl;
+
+			cout << users["User1"]["User"]; 
+			cout << users["User2"]["Password"]; 
 		}
-		else if (command == "--add" && sizeOfFile < 2000000)
+		else if (command == "--add")
 		{
-			cout << "--add if" << endl;
-			addFileToContainer(fileName);
-			addLog(fileName, "added", sizeOfFile);
+			if (sizeOfFile < 2000000)
+			{
+				cout << "--add if" << endl;
+				addFileToContainer(fileName);
+				addLog(fileName, "added", sizeOfFile);
+			}
+			else
+				cout << "File too large" << endl;
 		}
 		else if (command == "--delete")
 		{
